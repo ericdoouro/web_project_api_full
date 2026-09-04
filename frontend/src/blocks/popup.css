@@ -1,0 +1,146 @@
+/* Estilo base para o popup (invisível por padrão) */
+.popup {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Quando a classe .popup_opened for adicionada, mostra o popup */
+.popup_opened {
+  display: flex;
+}
+
+/* Estilização interna do container do popup */
+.popup__container {
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  width: 430px;
+  border-radius: 1rem;
+  position: relative;
+  padding: 34px 36px 36px;
+  box-sizing: border-box;
+}
+
+.popup__close-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  top: -41px;
+  right: -41px;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  background-image: url("/images/close.png");
+}
+
+.popup__title {
+  font-family: 'Inter';
+  font-weight: 900;
+  font-size: 24px;
+  line-height: 100%;
+  margin: 0;
+}
+
+.popup__image {
+  max-width: 100%;
+  max-width: 60vh;
+}
+
+.popup__container-image {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: transparent;
+  max-width: 75vw;
+  max-height: 75vh;
+  padding: 0;
+}
+
+.popup__image-text {
+  justify-content: flex-start;
+  margin-top: 10px;
+  color: #fff;
+  font-family: 'Inter';
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 100%;
+  text-align: left;
+}
+
+.popup__form {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+}
+
+.popup__input {
+  height: 40px;
+  margin-bottom: 20px;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  font-size: 14px;
+  outline: none;
+}
+
+.popup__input_type_error {
+  border-bottom: 1px solid red;
+}
+
+.popup__error {
+  color: red;
+  font-size: 12px;
+  min-height: 14px;
+}
+
+.popup__save-button_disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.popup__save-button {
+  margin-top: 10px;
+  height: 50px;
+  border: none;
+  background-color: black;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.popup__save-button:hover {
+  opacity: 0.8;
+}
+
+@media screen and (max-width: 320px) {
+
+  .popup__container {
+    width: 282px;
+    border-radius: 1rem;
+    position: relative;
+    padding: 25px 22px 25px;
+    box-sizing: border-box;
+  }
+
+  .popup__close-button {
+    top: -50px;
+    right: 20px;
+  }
+
+  .popup__container-image {
+    display: flex;
+    flex-direction: column;
+    background: transparent;
+    max-width: 75vw;
+    max-height: 75vh;
+    width: auto;
+    height: auto;
+    padding: 0;
+  }
+}

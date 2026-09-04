@@ -1,0 +1,143 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 auto;
+    max-width: 880px;
+    width: 100%;
+    height: 120px;
+    padding: 0 40px;
+    box-sizing: border-box;
+}
+
+.header__logo {
+    width: 200px;
+    height: 45px;
+}
+
+.header__logout {
+    margin: 0 0 0 40px;
+    padding: 0;
+    border: none;
+    background: none;
+    color: #A9A9A9;
+    font-size: 18px;
+}
+
+.header__email {
+    margin: 0;
+    margin-left: auto;
+    color: #FFFFFF;
+    font-size: 18px;
+}
+
+.header__email,
+.header__logout {
+    font-family: "Inter", sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+}
+
+.header__auth-link {
+    margin-left: auto;
+    color: #fff;
+    font-family: "Inter", sans-serif;
+    font-size: 18px;
+    line-height: 22px;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.header__auth-link:hover {
+    opacity: 0.6;
+}
+
+.header__user {
+    display: flex;
+    align-items: center;
+}
+
+.header__menu-button {
+    display: none;
+}
+
+.header__mobile-menu {
+    display: none;
+}
+
+@media screen and (max-width: 1280px) {
+    .header {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        margin: 0 auto;
+    }
+}
+
+@media screen and (max-width: 320px) {
+   .header {
+        height: 85px;
+        position: relative;
+    }
+
+    .header__logo {
+        width: 126px;
+        height: 24px;
+    }
+
+    .header__user {
+        display: none;
+    }
+
+    .header__auth-link {
+        font-size: 14px;
+        line-height: 22px;
+    }
+
+    .header__menu-button {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 30px;
+        height: 24px;
+        padding: 0;
+        margin-left: auto;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        flex-shrink: 0;
+    }
+
+    .header__menu-button span {
+        display: block;
+        width: 30px;
+        height: 4px;
+        background-color: #fff;
+    }
+
+    .header__mobile-menu {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        position: absolute;
+        top: 85px;
+        left: 0;
+        width: 100%;
+        padding: 20px 0;
+        box-sizing: border-box;
+        background-color: #000;
+        border-top: 1px solid #545454;
+        z-index: 10;
+    }
+
+    .header__mobile-menu .header__email {
+        margin: 0;
+        font-size: 18px;
+    }
+
+    .header__mobile-menu .header__logout {
+        margin: 0;
+        font-size: 18px;
+    }
+}
