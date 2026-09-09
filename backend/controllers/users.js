@@ -1,3 +1,6 @@
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+
 const User = require('../models/user');
 
 module.exports.getUsers = (req, res, next) => {
@@ -27,11 +30,32 @@ module.exports.getUserById = (req, res, next) => {
 };
 
 module.exports.createUser = (req, res, next) => {
-  const { name, about, avatar } = req.body;
+  const {
+    email, password, name, about, avatar,
+  } = req.body;
 
-  User.create({ name, about, avatar })
+  if (!password || password.length < 6) {
+    const error = new Error('A senha deve ter pelo menos 6 caracteres');
+    error.statusCode = 400;
+    return next(error);
+  }
+
+  return bcrypt.hash(password, 10)
+    .then((hash) => User.create({
+      email,
+      password: hash,
+      name,
+      about,
+      avatar,
+    }))
     .then((user) => {
-      res.status(201).send(user);
+      res.status(201).send({
+        _id: user._id,
+        email: user.email,
+        name: user.name,
+        about: user.about,
+        avatar: user.avatar,
+      });
     })
     .catch(next);
 };
@@ -50,6 +74,38 @@ module.exports.updateProfile = (req, res, next) => {
     .orFail()
     .then((user) => {
       res.send(user);
+    })
+    .catch(next);
+};
+
+module.exports.login = (req, res, next) => {
+  const { email, password } = req.body;
+
+  User.findOne({ email })
+    .select('+password')
+    .then((user) => {
+      if (!user) {
+        const error = new Error('E-mail ou senha incorretos');
+        error.statusCode = 401;
+        throw error;
+      }
+
+      return bcrypt.compare(password, user.password)
+        .then((matched) => {
+          if (!matched) {
+            const error = new Error('E-mail ou senha incorretos');
+            error.statusCode = 401;
+            throw error;
+          }
+
+          const token = jwt.sign(
+            { _id: user._id },
+            process.env.JWT_SECRET,
+            { expiresIn: '7d' },
+          );
+
+          res.send({ token });
+        });
     })
     .catch(next);
 };

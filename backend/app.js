@@ -1,9 +1,18 @@
 require('dotenv').config();
 
+const fs = require('fs');
+const path = require('path');
+
+const requestLog = path.join(__dirname, 'request.log');
+const errorLog = path.join(__dirname, 'error.log');
+
+const { isCelebrateError } = require('celebrate');
 const express = require('express');
 const mongoose = require('mongoose');
 const usersRouter = require('./routes/users');
 const cardsRouter = require('./routes/cards');
+const authRouter = require('./routes/auth');
+const auth = require('./middlewares/auth');
 
 const app = express();
 const { PORT = 3000 } = process.env;
@@ -18,6 +27,20 @@ mongoose
   });
 
 app.use(express.json());
+
+app.use((req, res, next) => {
+  res.on('finish', () => {
+    const log = `${new Date().toISOString()} ${req.method} ${req.originalUrl} ${res.statusCode}\n`;
+
+    fs.appendFile(requestLog, log, (err) => {
+      if (err) {
+        console.error('Erro ao registrar requisição:', err);
+      }
+    });
+  });
+
+  next();
+});
 
 app.use((req, res, next) => {
   res.header(
@@ -40,13 +63,8 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use((req, res, next) => {
-  req.user = {
-    _id: '6a974979f28b5d0b6b71baf4',
-  };
-  next();
-});
-
+app.use('/api', authRouter);
+app.use(auth);
 app.use('/api/users', usersRouter);
 app.use('/api/cards', cardsRouter);
 
@@ -56,8 +74,26 @@ app.use((req, res) => {
   });
 });
 
+app.use((err, req, res, next) => {
+  const log = `${new Date().toISOString()} ${req.method} ${req.originalUrl} ${err.stack || err.message}\n`;
+
+  fs.appendFile(errorLog, log, (logError) => {
+    if (logError) {
+      console.error('Erro ao registrar erro:', logError);
+    }
+  });
+
+  next(err);
+});
+
 app.use((err, req, res, _next) => {
   console.error('Erro:', err);
+
+  if (isCelebrateError(err)) {
+    return res.status(400).json({
+      message: 'Dados inválidos',
+    });
+  }
 
   if (err instanceof mongoose.Error.ValidationError) {
     return res.status(400).json({
@@ -75,6 +111,10 @@ app.use((err, req, res, _next) => {
     return res.status(404).json({
       message: 'Recurso não encontrado',
     });
+  }
+
+  if (err.code === 11000) {
+    return res.status(409).json({ message: 'E-mail já cadastrado' });
   }
 
   if (err.statusCode) {
