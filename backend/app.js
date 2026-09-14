@@ -43,24 +43,34 @@ app.use((req, res, next) => {
 });
 
 app.use((req, res, next) => {
-  res.header(
-    'Access-Control-Allow-Origin',
-    req.headers.origin === 'http://localhost:3000' ||
-      req.headers.origin === 'https://web-project-around-auth-iota.vercel.app'
-      ? req.headers.origin
-      : 'null',
-  );
-  
+  const allowedOrigins = [
+    'http://localhost:5173',
+    'https://web-project-around-auth-iota.vercel.app',
+  ];
+
+  if (allowedOrigins.includes(req.headers.origin)) {
+    res.header('Access-Control-Allow-Origin', req.headers.origin);
+  }
+
   res.header(
     'Access-Control-Allow-Methods',
     'GET,POST,PATCH,PUT,DELETE,OPTIONS',
   );
 
-  if (req.method === 'OPTIONS') {
-    return res.sendStatus(204);
-  }
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Content-Type, Authorization',
+  );
+
+  if (req.method === 'OPTIONS') return res.sendStatus(204);
 
   next();
+});
+
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('O servidor travará agora');
+  }, 0);
 });
 
 app.use('/api', authRouter);

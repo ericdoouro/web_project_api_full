@@ -93,7 +93,7 @@ function App() {
   };
 
   async function handleCardLike(card) {
-    const isLiked = card.isLiked;
+    const isLiked = card.likes.includes(currentUser._id);
 
     try {
       const newCard = await api.changeLikeCardStatus(
@@ -134,10 +134,10 @@ function App() {
           (currentCard) => currentCard._id !== cardToDelete._id
         )
       );
-
-      setCardToDelete(null);
     } catch (error) {
       console.error(error);
+    } finally {
+      setCardToDelete(null);
     }
   }
 

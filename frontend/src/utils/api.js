@@ -5,7 +5,20 @@ class Api {
   }
 
   _makeRequest(url, options) {
-    return fetch(url, options).then(this._checkResponse);
+    const token = localStorage.getItem("jwt");
+
+    const requestOptions = {
+      ...options,
+      headers: {
+        ...this._headers,
+        ...(token ? { authorization: `Bearer ${token}` } : {}),
+      },
+    };
+
+    return fetch(url, {
+      ...requestOptions,
+      cache: "no-store",
+    }).then(this._checkResponse);
   }
 
   _checkResponse(res) {
@@ -87,9 +100,8 @@ class Api {
 };
 
 const api = new Api({
-  baseUrl: "https://around-api.pt-br.tripleten-services.com/v1",
+  baseUrl: "http://localhost:3000/api",
   headers: {
-    authorization: "437f8561-72d0-4eae-8fce-fe37093ae3b9",
     "Content-Type": "application/json",
   },
 });
