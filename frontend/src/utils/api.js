@@ -100,7 +100,9 @@ class Api {
 };
 
 const api = new Api({
-  baseUrl: "http://localhost:3000/api",
+  baseUrl: import.meta.env.DEV
+  ? "http://localhost:3000/api"
+  : "/api",
   headers: {
     "Content-Type": "application/json",
   },
