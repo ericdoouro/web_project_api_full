@@ -6,8 +6,8 @@
         },
         "backend": {
             "root": "backend",
-            "entrypoint": "app.js"
-            }
+            "entrypoint": "app.js:app"
+        }
     },
     "rewrites": [
         {
