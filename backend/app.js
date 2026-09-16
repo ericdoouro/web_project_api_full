@@ -17,14 +17,29 @@ const auth = require('./middlewares/auth');
 const app = express();
 const { PORT = 3000 } = process.env;
 
-mongoose
-  .connect(process.env.MONGODB_URI)
-  .then(() => {
-    console.log('Conectado ao MongoDB');
-  })
-  .catch((err) => {
-    console.error('Erro ao conectar ao MongoDB:', err);
-  });
+let dbPromise;
+
+function connectDB() {
+  if (mongoose.connection.readyState === 1) {
+    return Promise.resolve();
+  }
+
+  if (!dbPromise) {
+    dbPromise = mongoose
+      .connect(process.env.MONGODB_URI, {
+        serverSelectionTimeoutMS: 5000,
+      })
+      .then(() => {
+        console.log('Conectado ao MongoDB');
+      })
+      .catch((err) => {
+        dbPromise = null;
+        throw err;
+      });
+  }
+
+  return dbPromise;
+}
 
 app.use(express.json());
 
@@ -73,8 +88,18 @@ app.get('/crash-test', () => {
   }, 0);
 });
 
+app.use('/api', async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
+
 app.use('/api', authRouter);
 app.use(auth);
+
 app.use('/api/users', usersRouter);
 app.use('/api/cards', cardsRouter);
 
