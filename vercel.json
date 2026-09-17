@@ -2,7 +2,17 @@
     "services": {
         "frontend": {
             "root": "frontend",
-            "framework": "vite"
+            "framework": "vite",
+            "rewrites": [
+                {
+                    "source": "/signup",
+                    "destination": "/index.html"
+                },
+                {
+                    "source": "/signin",
+                    "destination": "/index.html"
+                }
+            ]
         },
         "backend": {
             "root": "backend",
@@ -10,6 +20,7 @@
             "entrypoint": "app.js"
         }
     },
+
     "rewrites": [
         {
             "source": "/api/:path*",
@@ -29,8 +40,7 @@
             "source": "/(.*)",
             "destination": {
                 "type": "service",
-                "service": "frontend",
-                "path": "/index.html"
+                "service": "frontend"
             }
         }
     ]
