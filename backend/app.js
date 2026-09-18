@@ -1,14 +1,13 @@
 require('dotenv').config();
 
-const fs = require('fs');
-const path = require('path');
-
-const requestLog = path.join(__dirname, 'request.log');
-const errorLog = path.join(__dirname, 'error.log');
+// Os logs são enviados para o console.
+// Em produção, o Vercel coleta esses logs automaticamente.
 
 const { isCelebrateError } = require('celebrate');
+
 const express = require('express');
 const mongoose = require('mongoose');
+
 const usersRouter = require('./routes/users');
 const cardsRouter = require('./routes/cards');
 const authRouter = require('./routes/auth');
@@ -45,13 +44,9 @@ app.use(express.json());
 
 app.use((req, res, next) => {
   res.on('finish', () => {
-    const log = `${new Date().toISOString()} ${req.method} ${req.originalUrl} ${res.statusCode}\n`;
-
-    fs.appendFile(requestLog, log, (err) => {
-      if (err) {
-        console.error('Erro ao registrar requisição:', err);
-      }
-    });
+    console.log(
+      `${new Date().toISOString()} ${req.method} ${req.originalUrl} ${res.statusCode}`,
+    );
   });
 
   next();
@@ -110,13 +105,10 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  const log = `${new Date().toISOString()} ${req.method} ${req.originalUrl} ${err.stack || err.message}\n`;
-
-  fs.appendFile(errorLog, log, (logError) => {
-    if (logError) {
-      console.error('Erro ao registrar erro:', logError);
-    }
-  });
+  console.error(
+    `${new Date().toISOString()} ${req.method} ${req.originalUrl}`,
+    err,
+  );
 
   next(err);
 });
