@@ -453,14 +453,10 @@ Deploy
 Aplicação
 
 URL da aplicação:
-
-A SER PREENCHIDA APÓS O DEPLOY
-Servidor
+https://web-project-api-full-pi.vercel.app
 
 Domínio do servidor:
-
-A SER PREENCHIDO APÓS O DEPLOY
-Imagens do projeto
+https://web-project-api-full-pi.vercel.app 
 
 Capturas de tela da aplicação podem ser adicionadas nesta seção para demonstrar as principais funcionalidades.
 
