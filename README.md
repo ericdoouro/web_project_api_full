@@ -1,6 +1,6 @@
 # Around the U.S. — Projeto 18
 
-Aplicação Full Stack desenvolvida durante o Bootcamp de Desenvolvimento Web da TripleTen, utilizando React, Node.js, Express e MongoDB, com autenticação JWT e gerenciamento de usuários e cards.
+Aplicação web desenvolvida durante o Bootcamp de Desenvolvimento Web da TripleTen.
 
 O projeto **Around the U.S.** evoluiu ao longo das etapas do curso, começando como uma aplicação front-end e chegando a uma arquitetura completa com **React no front-end, API REST própria no back-end, autenticação de usuários, autorização e banco de dados MongoDB**.
 
